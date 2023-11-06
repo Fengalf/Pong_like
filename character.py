@@ -1,6 +1,7 @@
 from turtle import Turtle
 
 WINDOW_WIDTH: int = 480
+WINDOW_HEIGHT: int = 480
 HEADINGS: dict = {
     "up": 90,
     "down": 270,
@@ -23,9 +24,9 @@ class Paddle(Turtle):
         """
 
         if self.orientation == "left":
-            x_offset = (WINDOW_WIDTH - self.size) * -1
+            x_offset = (WINDOW_WIDTH/2 - self.size) * -1
         else:
-            x_offset = (WINDOW_WIDTH - self.size)
+            x_offset = (WINDOW_WIDTH/2 - self.size)
 
         for _ in range(0, self.segments, 1):
             new_segment = Turtle()
@@ -41,18 +42,21 @@ class Paddle(Turtle):
         """
             Moves the paddle up
         """
-        for index in range(0, len(self.segment_list), -1):
-            goto_pos = self.segment_list[index-1].pos()
-            self.segment_list[index].setpos(goto_pos)
-        self.segment_list[0].setheading["up"]
-        self.segment_list[0].forward(self.size)
+        if self.segment_list[0].distance(self.segment_list[0].xcor(), int(WINDOW_HEIGHT/2)-self.size) >= self.size:
+            for index in range(len(self.segment_list)-1, 0, -1):
+                goto_pos = self.segment_list[index-1].pos()
+                self.segment_list[index].setpos(goto_pos)
+            self.segment_list[0].setheading(HEADINGS["up"])
+            self.segment_list[0].forward(self.size)
 
     def move_down(self):
         """
             Moves the paddle up
         """
-        for index in range(0, len(self.segment_list), 1):
-            goto_pos = self.segment_list[index-1].pos()
-            self.segment_list[index].setpos(goto_pos)
-        self.segment_list[-1].setheading["down"]
-        self.segment_list[-1].forward(self.size)
+        if self.segment_list[-1].distance(self.segment_list[-1].xcor(), (int(WINDOW_HEIGHT/2)-self.size)*-1) >= self.size:
+            for index in range(0, len(self.segment_list), 1):
+                if index != len(self.segment_list)-1:
+                    goto_pos = self.segment_list[index+1].pos()
+                    self.segment_list[index].setpos(goto_pos)
+            self.segment_list[-1].setheading(HEADINGS["down"])
+            self.segment_list[-1].forward(self.size)
