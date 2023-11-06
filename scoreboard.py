@@ -43,3 +43,12 @@ class Scoreboard(Turtle):
         else:
             self.setposition((40, WINDOW_HEIGHT/2-(self.size*2)))
             self.write(self.right_score, font=("Arial", self.size, "bold"))
+
+    def game_over(self):
+        self.hideturtle()
+        self.turtlesize(self.size, self.size)
+        self.penup()
+        self.color("white")
+        self.shape("square")
+        self.speed("fastest")
+        self.write(self.left_score, font=("Arial", self.size, "bold"))

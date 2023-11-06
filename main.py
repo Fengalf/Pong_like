@@ -42,6 +42,8 @@ def pong_game():
         sleep(REFRESH_RATE)
         window.update()
 
+    scoreboard.game_over()
+
 
 if __name__ == "__main__":
     pong_game()
