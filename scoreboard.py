@@ -1,11 +1,11 @@
 from turtle import Turtle
 
-WINDOW_HEIGHT = 480
-WINDOW_WIDTH = 480
+WINDOW_HEIGHT = 600
+WINDOW_WIDTH = 800
 
 
 class Scoreboard(Turtle):
-    def __init__(self, shape: str = "classic", undobuffersize: int = 1000, visible: bool = True) -> None:
+    def __init__(self, shape: str = "classic", undobuffersize: int = 1000, visible: bool = False) -> None:
         super().__init__(shape, undobuffersize, visible)
 
         # setting attributes
@@ -13,7 +13,6 @@ class Scoreboard(Turtle):
         self.right_score = 0
         self.size = 15
         self.centerline = []
-        self.hideturtle()
 
         # calling initializing methods
         self.create_center_line()
