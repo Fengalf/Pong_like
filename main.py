@@ -4,7 +4,11 @@ from turtle import Screen
 from time import sleep
 
 WINDOW_BG_COLOR = "black"
-REFRESH_RATE = 0.5
+WINDOW_HEIGHT = 480
+WINDOW_WIDTH = 480
+REFRESH_RATE = 0.01
+
+TESTING = True
 
 
 def pong_game():
@@ -17,18 +21,23 @@ def pong_game():
 
     # Modifying the screen
     window.title("Pingu Pongo")
+    window.setup(width=WINDOW_WIDTH, height=WINDOW_HEIGHT)
     window.bgcolor(WINDOW_BG_COLOR)
-    window.exitonclick()
+    window.tracer(0)
+    window.listen()
 
     # Setting up left paddle controls
     window.onkeypress(key="w", fun=paddle_left.move_up)
-    window.onkeypress(key="S", fun=paddle_left.move_down)
+    window.onkeypress(key="s", fun=paddle_left.move_down)
 
     # Setting up right paddle controls
     window.onkeypress(key="Up", fun=paddle_right.move_up)
     window.onkeypress(key="Down", fun=paddle_right.move_down)
 
-    while True:
+    # Setting game options
+    window.onkeypress(key="Escape", fun=window.bye)
+
+    while TESTING:
         sleep(REFRESH_RATE)
         window.update()
 
