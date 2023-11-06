@@ -3,12 +3,13 @@ from scoreboard import Scoreboard
 from turtle import Screen
 from time import sleep
 
-WINDOW_BG_COLOR = "black"
+WINDOW_BG_COLOR = "grey"
 WINDOW_HEIGHT = 480
 WINDOW_WIDTH = 480
 REFRESH_RATE = 0.01
+MAX_SCORE = 10
 
-TESTING = True
+TESTING = False
 
 
 def pong_game():
@@ -37,7 +38,7 @@ def pong_game():
     # Setting game options
     window.onkeypress(key="Escape", fun=window.bye)
 
-    while TESTING:
+    while TESTING or (MAX_SCORE > scoreboard.left_score and MAX_SCORE > scoreboard.right_score):
         sleep(REFRESH_RATE)
         window.update()
 
