@@ -13,6 +13,7 @@ class Scoreboard(Turtle):
         self.right_score = 0
         self.size = 15
         self.centerline = []
+        self.hideturtle()
 
         # calling initializing methods
         self.create_center_line()
@@ -51,4 +52,7 @@ class Scoreboard(Turtle):
         self.color("white")
         self.shape("square")
         self.speed("fastest")
-        self.write(self.left_score, font=("Arial", self.size, "bold"))
+        self.setposition(0, 0)
+        self.write("Game over!",
+                   align="center",
+                   font=("Arial", self.size, "bold"))
