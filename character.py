@@ -1,7 +1,16 @@
 from turtle import Turtle
 
-WINDOW_WIDTH: int = 480
-WINDOW_HEIGHT: int = 480
+WINDOW_HEIGHT: int = 600
+WINDOW_WIDTH: int = 800
+PADDLE_COLOR: str = "white"
+PADDLE_HEIGHT: float = 5
+PADDLE_WIDTH: float = 1
+PADDLE_PACE: int = 15  # Setting the movement speed of the paddles
+PADDLE_PADDING: int = 15  # Setting the padding to the wall
+PADDLE_SHAPE: str = "square"
+PADDLE_SPEED: int = "fastest"  # Setting the animation speed of the paddles
+PADDLE_X_POS: int = int(WINDOW_WIDTH/2-PADDLE_PADDING)
+PADDLE_MAX_Y_POS: int = int(WINDOW_HEIGHT/2-PADDLE_PADDING)
 HEADINGS: dict = {
     "up": 90,
     "down": 270,
@@ -12,51 +21,35 @@ class Paddle(Turtle):
     def __init__(self, orientation: str, shape: str = "classic", undobuffersize: int = 1000, visible: bool = True) -> None:
         super().__init__(shape, undobuffersize, visible)
         self.orientation = orientation.lower()
-        self.segments = 5
-        self.y_offset = 40
-        self.size = 20
-        self.segment_list = []
-        self.build_segment()
+        print(self.turtlesize())
+        self.turtlesize(stretch_wid=PADDLE_HEIGHT, stretch_len=PADDLE_WIDTH)
+        print(self.turtlesize())
+        self.penup()
+        self.shape(PADDLE_SHAPE)
+        self.color(PADDLE_COLOR)
+        self.speed(PADDLE_SPEED)
+        self.place_paddle()
 
-    def build_segment(self):
-        """
-            Creating the paddle
-        """
-
+    def place_paddle(self):
         if self.orientation == "left":
-            x_offset = (WINDOW_WIDTH/2 - self.size) * -1
+            self.setposition(PADDLE_X_POS*-1, 0)
         else:
-            x_offset = (WINDOW_WIDTH/2 - self.size)
-
-        for _ in range(0, self.segments, 1):
-            new_segment = Turtle()
-            new_segment.penup()
-            new_segment.color("white")
-            new_segment.speed("fastest")
-            new_segment.shape("square")
-            new_segment.setposition(x_offset, self.y_offset)
-            self.segment_list.append(new_segment)
-            self.y_offset -= 20
+            self.setposition(PADDLE_X_POS, 0)
 
     def move_up(self):
         """
             Moves the paddle up
         """
-        if self.segment_list[0].distance(self.segment_list[0].xcor(), int(WINDOW_HEIGHT/2)-self.size) >= self.size:
-            for index in range(len(self.segment_list)-1, 0, -1):
-                goto_pos = self.segment_list[index-1].pos()
-                self.segment_list[index].setpos(goto_pos)
-            self.segment_list[0].setheading(HEADINGS["up"])
-            self.segment_list[0].forward(self.size)
+        current_y = self.ycor()
+        new_y = current_y + PADDLE_PACE
+        if self.distance(self.xcor(), PADDLE_MAX_Y_POS) >= PADDLE_WIDTH:
+            self.setposition(self.xcor(), new_y)
 
     def move_down(self):
         """
             Moves the paddle up
         """
-        if self.segment_list[-1].distance(self.segment_list[-1].xcor(), (int(WINDOW_HEIGHT/2)-self.size)*-1) >= self.size:
-            for index in range(0, len(self.segment_list), 1):
-                if index != len(self.segment_list)-1:
-                    goto_pos = self.segment_list[index+1].pos()
-                    self.segment_list[index].setpos(goto_pos)
-            self.segment_list[-1].setheading(HEADINGS["down"])
-            self.segment_list[-1].forward(self.size)
+        current_y = self.ycor()
+        new_y = current_y - PADDLE_PACE
+        if self.distance(self.xcor(), PADDLE_MAX_Y_POS*-1) >= PADDLE_WIDTH:
+            self.setposition(self.xcor(), new_y)
