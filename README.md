@@ -10,6 +10,7 @@ In my opinion for `Pong` to be built these bits are:
 * Player paddles
   * A paddle for the left side
   * A paddle for the right side
+  * Edit: Make the paddles move
   
 * Scoreboard
   * A score text on the left side
