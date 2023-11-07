@@ -1,3 +1,5 @@
+# TODO Change the behavior if the ball hits the wall. The ball needs to reset unless the score was reached
+
 from character import Paddle
 from scoreboard import Scoreboard
 from ball import PongBall
@@ -8,8 +10,8 @@ WINDOW_BG_COLOR = "grey"
 WINDOW_HEIGHT = 600
 WINDOW_WIDTH = 800
 REFRESH_RATE = 0.01
-BALL_SIZE = 15
-MAX_SCORE = 1
+BALL_SIZE = 15.0
+MAX_SCORE = 10
 
 TESTING = False
 
@@ -40,13 +42,28 @@ def pong_game():
 
     # Setting game options
     window.onkeypress(key="Escape", fun=window.bye)
+    game_is_on: bool = True
 
-    while TESTING or (MAX_SCORE > scoreboard.left_score and MAX_SCORE > scoreboard.right_score):
-        if paddle_left.distance(pong_ball.position()) <= BALL_SIZE or paddle_right.distance(pong_ball.position()) <= BALL_SIZE:
-            pong_ball.change_heading()
-        pong_ball.move()
+    while TESTING or game_is_on:
         sleep(REFRESH_RATE)
         window.update()
+        # Handling collisions
+        # Paddle collision
+        if paddle_left.distance(pong_ball.position()) <= BALL_SIZE or paddle_right.distance(pong_ball.position()) <= BALL_SIZE:
+            pong_ball.change_heading()
+
+        pong_ball.move()
+
+        if pong_ball.distance(WINDOW_WIDTH/2*-1, pong_ball.ycor()) <= BALL_SIZE:
+            # Change to incrementing a point for right player and resetting the ball
+            pass
+        elif pong_ball.distance(WINDOW_WIDTH/2, pong_ball.ycor()) <= BALL_SIZE:
+            # Change to incrementing a point for left player and resetting the ball
+            pass
+
+        # Game ending condition
+        if MAX_SCORE == scoreboard.left_score or MAX_SCORE == scoreboard.right_score:
+            game_is_on = False
 
     scoreboard.game_over()
     window.exitonclick()
