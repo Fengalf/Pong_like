@@ -1,3 +1,5 @@
+# TODO Change wall collision detection
+
 from turtle import Turtle
 
 WINDOW_HEIGHT: int = 600
@@ -21,9 +23,7 @@ class Paddle(Turtle):
     def __init__(self, orientation: str, shape: str = "classic", undobuffersize: int = 1000, visible: bool = True) -> None:
         super().__init__(shape, undobuffersize, visible)
         self.orientation = orientation.lower()
-        print(self.turtlesize())
         self.turtlesize(stretch_wid=PADDLE_HEIGHT, stretch_len=PADDLE_WIDTH)
-        print(self.turtlesize())
         self.penup()
         self.shape(PADDLE_SHAPE)
         self.color(PADDLE_COLOR)
