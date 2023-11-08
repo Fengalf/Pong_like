@@ -20,9 +20,10 @@ HEADINGS: dict = {
 
 
 class Paddle(Turtle):
-    def __init__(self, orientation: str, shape: str = "classic", undobuffersize: int = 1000, visible: bool = True) -> None:
+    def __init__(self, orientation: str, paddle_wall_offset: int, shape: str = "classic", undobuffersize: int = 1000, visible: bool = True) -> None:
         super().__init__(shape, undobuffersize, visible)
         self.orientation = orientation.lower()
+        self.paddle_wall_offset = paddle_wall_offset
         self.turtlesize(stretch_wid=PADDLE_HEIGHT, stretch_len=PADDLE_WIDTH)
         self.penup()
         self.shape(PADDLE_SHAPE)
@@ -32,9 +33,9 @@ class Paddle(Turtle):
 
     def place_paddle(self):
         if self.orientation == "left":
-            self.setposition(PADDLE_X_POS*-1, 0)
-        else:
-            self.setposition(PADDLE_X_POS, 0)
+            self.setposition(PADDLE_X_POS*-1 + self.paddle_wall_offset, 0)
+        elif self.orientation == "right":
+            self.setposition(PADDLE_X_POS - self.paddle_wall_offset, 0)
 
     def move_up(self):
         """
