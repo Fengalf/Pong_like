@@ -1,4 +1,4 @@
-# TODO Add logic how to randomise the angle leaving a paddle
+# TODO Add logic how to randomize the angle leaving a paddle
 
 from turtle import Turtle
 from random import randint
@@ -14,12 +14,16 @@ class PongBall(Turtle):
         self.color(BALL_COLOR)
         self.penup()
         self.speed("fast")
-        self.move_speed = 5
+        self.ball_speed_x = 2
+        self.ball_speed_y = 2
 
-    def change_heading(self):
-        angle: int = int(self.heading())
-        angle = 180  # + randint(-20, 20)
-        self.left(angle)
+    # def change_heading(self):
+    #     angle: int = int(self.heading())
+    #     angle = 180
+    #     self.left(angle)
 
     def move(self):
-        self.forward(self.move_speed)
+        x_move_speed = self.xcor() + self.ball_speed_x
+        y_move_speed = self.ycor() + self.ball_speed_y
+        move_speed = (x_move_speed, y_move_speed)
+        self.goto(move_speed)
