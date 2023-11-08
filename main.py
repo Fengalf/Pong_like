@@ -1,4 +1,5 @@
 # TODO Change the behavior if the ball hits the wall. The ball needs to reset unless the score was reached
+# TODO Add top and bottom wall collision
 
 from character import Paddle
 from scoreboard import Scoreboard
@@ -10,7 +11,10 @@ WINDOW_BG_COLOR = "grey"
 WINDOW_HEIGHT = 600
 WINDOW_WIDTH = 800
 REFRESH_RATE = 0.01
-BALL_SIZE = 15.0
+BALL_SIZE = 25.0
+BALL_START_CORDS = (0, 0)
+PADDLE_WALL_OFFSET = 20
+BALL_BOUNCE_OFFSET = BALL_SIZE + PADDLE_WALL_OFFSET
 MAX_SCORE = 10
 
 TESTING = False
@@ -21,8 +25,10 @@ def pong_game():
     # Creating class instances
     window = Screen()
     scoreboard = Scoreboard()
-    paddle_left = Paddle(orientation="left")
-    paddle_right = Paddle(orientation="right")
+    paddle_left = Paddle(orientation="left",
+                         paddle_wall_offset=PADDLE_WALL_OFFSET)
+    paddle_right = Paddle(orientation="right",
+                          paddle_wall_offset=PADDLE_WALL_OFFSET)
     pong_ball = PongBall()
 
     # Modifying the screen
@@ -47,23 +53,39 @@ def pong_game():
     while TESTING or game_is_on:
         sleep(REFRESH_RATE)
         window.update()
+
         # Handling collisions
+
         # Paddle collision
-        if paddle_left.distance(pong_ball.position()) <= BALL_SIZE or paddle_right.distance(pong_ball.position()) <= BALL_SIZE:
-            pong_ball.change_heading()
+        if paddle_left.distance(pong_ball.position()) <= BALL_BOUNCE_OFFSET \
+                and pong_ball.xcor() <= WINDOW_WIDTH/2*-1 + BALL_BOUNCE_OFFSET \
+                or paddle_right.distance(pong_ball.position()) <= BALL_BOUNCE_OFFSET \
+                and pong_ball.xcor() >= WINDOW_WIDTH/2 - BALL_BOUNCE_OFFSET:
+            pong_ball.ball_speed_x *= -1
 
-        pong_ball.move()
+        # Ceil and floor collision
+        if pong_ball.distance(pong_ball.xcor(), WINDOW_HEIGHT/2) <= BALL_SIZE \
+                or pong_ball.distance(pong_ball.xcor(), WINDOW_HEIGHT/2*-1) <= BALL_SIZE:
+            pong_ball.ball_speed_y *= -1
 
+        # Left and right wall collisions
         if pong_ball.distance(WINDOW_WIDTH/2*-1, pong_ball.ycor()) <= BALL_SIZE:
-            # Change to incrementing a point for right player and resetting the ball
-            pass
+            scoreboard.update_score("right")
+            pong_ball.setposition(BALL_START_CORDS)
+            pong_ball.ball_speed_x *= -1
+            sleep(1)
+
         elif pong_ball.distance(WINDOW_WIDTH/2, pong_ball.ycor()) <= BALL_SIZE:
-            # Change to incrementing a point for left player and resetting the ball
-            pass
+            scoreboard.update_score("left")
+            pong_ball.setposition(BALL_START_CORDS)
+            pong_ball.ball_speed_x *= -1
+            sleep(1)
 
         # Game ending condition
         if MAX_SCORE == scoreboard.left_score or MAX_SCORE == scoreboard.right_score:
             game_is_on = False
+
+        pong_ball.move()
 
     scoreboard.game_over()
     window.exitonclick()
