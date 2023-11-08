@@ -16,8 +16,10 @@ class Scoreboard(Turtle):
 
         # calling initializing methods
         self.create_center_line()
-        self.left_counter = self.create_counter("left")
-        self.right_counter = self.create_counter("right")
+        self.counter = {
+            "left_counter": self.create_counter("left"),
+            "right_counter": self.create_counter("right")
+        }
 
     def create_center_line(self):
         for y_cord in range(int(WINDOW_HEIGHT/2)-(self.size*2), (int(WINDOW_HEIGHT/2)-self.size)*-1, self.size*-2):
@@ -31,18 +33,24 @@ class Scoreboard(Turtle):
             self.centerline.append(new_segment)
 
     def create_counter(self, orientation: str):
-        self.hideturtle()
-        self.turtlesize(self.size, self.size)
-        self.penup()
-        self.color("white")
-        self.shape("square")
-        self.speed("fastest")
+        new_counter = Turtle()
+        new_counter.hideturtle()
+        new_counter.turtlesize(self.size, self.size)
+        new_counter.penup()
+        new_counter.color("white")
+        new_counter.shape("square")
+        new_counter.speed("fastest")
         if orientation == "left":
-            self.setposition((-45, WINDOW_HEIGHT/2-(self.size*2)))
-            self.write(self.left_score, font=("Arial", self.size, "bold"))
+            new_counter.setposition(
+                (-45, WINDOW_HEIGHT/2-(self.size*2)))
+            new_counter.write(self.left_score, font=(
+                "Arial", self.size, "bold"))
         else:
-            self.setposition((40, WINDOW_HEIGHT/2-(self.size*2)))
-            self.write(self.right_score, font=("Arial", self.size, "bold"))
+            new_counter.setposition((40, WINDOW_HEIGHT/2-(self.size*2)))
+            new_counter.write(self.right_score, font=(
+                "Arial", self.size, "bold"))
+
+        return new_counter
 
     def game_over(self):
         self.hideturtle()
@@ -55,3 +63,15 @@ class Scoreboard(Turtle):
         self.write("Game over!",
                    align="center",
                    font=("Arial", self.size, "bold"))
+
+    def update_score(self, orientation_scored: str):
+        if orientation_scored == "left":
+            self.left_score += 1
+            self.counter["left_counter"].clear()
+            self.counter["left_counter"].write(self.left_score, font=(
+                "Arial", self.size, "bold"))
+        elif orientation_scored == "right":
+            self.right_score += 1
+            self.counter["right_counter"].clear()
+            self.counter["right_counter"].write(self.right_score, font=(
+                "Arial", self.size, "bold"))
