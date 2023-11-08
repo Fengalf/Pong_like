@@ -1,5 +1,3 @@
-# TODO Change wall collision detection
-
 from turtle import Turtle
 
 WINDOW_HEIGHT: int = 600

@@ -1,5 +1,3 @@
-# TODO Add logic how to randomize the angle leaving a paddle
-
 from turtle import Turtle
 from random import randint
 

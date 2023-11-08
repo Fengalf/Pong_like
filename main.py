@@ -1,6 +1,3 @@
-# TODO Change the behavior if the ball hits the wall. The ball needs to reset unless the score was reached
-# TODO Add top and bottom wall collision
-
 from character import Paddle
 from scoreboard import Scoreboard
 from ball import PongBall
